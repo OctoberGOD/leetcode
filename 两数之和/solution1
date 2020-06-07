@@ -9,6 +9,7 @@ class Solution {
                 {
                     indexs[0]=i;
                     indexs[1]=j;
+                    
                     return indexs;
                 }
             }
