@@ -1,0 +1,45 @@
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+"""
+
+class Solution:
+    def copyRandomList(self, head: 'Node') -> 'Node':
+        from collections import deque
+        lookup = {}
+        #创建新字典
+    
+        def bfs(head):
+            if not head: return head
+            #如果head空，返回head
+            clone = Node(head.val, None, None)
+            #创建head的拷贝
+            queue = deque()
+            queue.appendleft(head)
+            #初始化队列，放入队列的是原链表的结点，而不是拷贝
+            lookup[head] = clone
+            #字典建立链表节点和拷贝到连接
+            while queue:
+                tmp = queue.pop()
+                #出队列
+                if tmp.next and tmp.next not in lookup:
+                    #如果当前出队结点的next存在并且没有放进lookup字典
+                    lookup[tmp.next] = Node(tmp.next.val, [], [])
+                    #建立拷贝并且送进字典
+                    queue.appendleft(tmp.next)  
+                    #将tmp.next入队
+                if tmp.random and tmp.random not in lookup:
+                    #如果tmp.random存在且没有放进字典
+                    lookup[tmp.random] = Node(tmp.random.val, [], [])
+                    #建立拷贝并送入字典
+                    queue.appendleft(tmp.random)
+                    #将tmp.random入队
+                lookup[tmp].next = lookup.get(tmp.next)
+                lookup[tmp].random = lookup.get(tmp.random)
+                #对队列中的tmp结点的tmp和random建立真实的连接
+            return clone
+        return bfs(head)
